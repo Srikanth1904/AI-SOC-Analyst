@@ -95,12 +95,47 @@ function App() {
     }}
   >
     <h2>Security Analysis</h2>
+    {result.risk_level === "HIGH" && (
+  <div
+    style={{
+      background: "#dc2626",
+      color: "white",
+      padding: "15px",
+      borderRadius: "8px",
+      marginBottom: "15px",
+      fontWeight: "bold",
+      textAlign: "center"
+    }}
+  >
+    🚨 SOC ALERT <br />
+    Possible Brute Force Attack Detected
+  </div>
+)}
 
     <p><b>Failed Logins:</b> {result.analysis.failed_logins}</p>
 
     <p><b>Successful Logins:</b> {result.analysis.successful_logins}</p>
+    <p>
+      <b>Detected IPs:</b>
+    </p>
 
-    <p><b>Risk Level:</b> {result.risk_level}</p>
+<ul>
+  {result.analysis.ip_addresses?.map((ip, index) => (
+    <li key={index}>{ip}</li>
+  ))}
+</ul>
+<p>
+  <b>Top Attacker IP:</b>{" "}
+  {result.analysis.top_attacker_ip}
+</p>
+
+    <p>
+      <b>Risk Level:</b> {result.risk_level}
+    </p>
+    <p>
+  <b>Threat Severity Score:</b>{" "}
+  {result.severity_score}/100
+</p>
 
     <p><b>Anomaly Status:</b> {result.anomaly_status}</p>
 

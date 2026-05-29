@@ -1,7 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from anomaly_detector import detect_anomalies
 from report_generator import generate_recommendation
-from threat_analyzer import analyze_threat
+from threat_analyzer import analyze_threats
 from log_parser import parse_logs
 from fastapi import FastAPI, UploadFile, File
 
@@ -37,13 +37,8 @@ async def upload_log(file: UploadFile = File(...)):
 
     analysis = parse_logs(decoded_content)
 
-    risk_level = analyze_threat(
-        analysis["failed_logins"]
-    )
-
-    recommendation = generate_recommendation(
-        risk_level
-    )
+    risk_level, recommendation, severity_score = analyze_threats(analysis)
+    
     anomaly_status = detect_anomalies(
     analysis["failed_logins"]
     )
@@ -53,5 +48,6 @@ async def upload_log(file: UploadFile = File(...)):
         "analysis": analysis,
         "risk_level": risk_level,
         "anomaly_status": anomaly_status,
+        "severity_score": severity_score,
         "recommendation": recommendation
     }
